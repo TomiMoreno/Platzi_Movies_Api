@@ -27,25 +27,44 @@ class MongoLib {
     return MongoLib.connection;
   }
   getAll(collection, query) {
-    this.connect().then(db => {});
+    this.connect().then(db => {
+      return db
+        .collection(collection)
+        .find(query)
+        .toArray();
+    });
   }
 
   get(collection, id) {
-    this.connect().then(db => {});
+    this.connect().then(db => {
+      return db.collection(collection).findOne({ _id: ObjectId(id) });
+    });
   }
 
   create(collection, data) {
     this.connect()
-      .then(db => {})
-      .then(result => result.InsertedId);
+      .then(db => {
+        return db.collection(collection).insertOne(data);
+      })
+      .then(result => result.upsertedId);
   }
 
   update(collection, id, data) {
-    this.connect().then(db => {});
+    this.connect()
+      .then(db => {
+        return db
+          .collection(collection)
+          .updateOne({ _id: ObjectId(id) }, { $set: data }, { upsert: true });
+      })
+      .then(result => result.upsertedId || id);
   }
 
   delete(collection, id) {
-    this.connect().then(db => {});
+    this.connect()
+      .then(db => {
+        return db.collection(collection).deleteOne({ _id: ObjectId(id) });
+      })
+      .then(() => id);
   }
 }
 

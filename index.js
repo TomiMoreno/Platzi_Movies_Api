@@ -12,7 +12,7 @@ const {
 } = require('./utils/middleware/errorHandlers');
 
 const notFoundHandler = require('./utils/middleware/notFoundHandler');
-app.use(cors);
+// app.use(cors);
 app.use(express.json());
 app.use(morgan('tiny'));
 

@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const moviesApi = require('./routes/movies');
 const userMoviesApi = require('./routes/userMovie');
+const authApi = require('./routes/auth')
 const { config } = require('./config/index');
 const morgan = require('morgan');
 const cors = require('cors');
@@ -19,6 +20,7 @@ app.use(morgan('tiny'));
 
 moviesApi(app);
 userMoviesApi(app);
+authApi(app);
 
 //Catch 404
 app.use(notFoundHandler);

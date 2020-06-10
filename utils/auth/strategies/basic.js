@@ -11,21 +11,17 @@ passport.use(new BasicStrategy( async (email,password,cb)=>{
         const user = await userServices.getUser({ email });
         
         if(!user){
-           
             return cb(boom.unauthorized(), false)
         }
-        console.log(user);
         
-        const contraseñaCorrecta = await bcrypt.compare(password, user.password)
-        if(!contraseñaCorrecta){
-            return cb(boom.unauthorized("Tu contraseña està mal"), false)
+        if(!await bcrypt.compare(password, user.password)){
+            return cb(boom.unauthorized(), false)
         }
 
         delete user.password
 
         return cb(null,user)
     }catch(err){
-        
         cb(err)
     }
 }))
